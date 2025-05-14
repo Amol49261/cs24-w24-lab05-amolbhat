@@ -2,39 +2,48 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <sstream>
 #include "card.h"
 #include "card_list.h"
-//Do not include set in this file
 
 using namespace std;
+using bst::BST;
+using bst::playGame;
 
-int main(int argv, char** argc){
-  if(argv < 3){
-    cout << "Please provide 2 file names" << endl;
-    return 1;
-  }
-  
-  ifstream cardFile1 (argc[1]);
-  ifstream cardFile2 (argc[2]);
-  string line;
+int main(int argv, char** argc) {
+    if (argv < 3) {
+        cout << "Please provide 2 file names" << endl;
+        return 1;
+    }
 
-  if (cardFile1.fail() || cardFile2.fail() ){
-    cout << "Could not open file " << argc[2];
-    return 1;
-  }
+    ifstream cardFile1(argc[1]);
+    ifstream cardFile2(argc[2]);
+    string line;
 
-  //Read each file
-  while (getline (cardFile1, line) && (line.length() > 0)){
+    if (cardFile1.fail() || cardFile2.fail()) {
+        cout << "Could not open file " << argc[2];
+        return 1;
+    }
 
-  }
-  cardFile1.close();
+    BST alice, bob;
+    char suit;
+    string rank;
 
+    while (getline(cardFile1, line) && (line.length() > 0)) {
+        istringstream iss(line);
+        iss >> suit >> rank;
+        alice.insert(Card(suit, rank));
+    }
+    cardFile1.close();
 
-  while (getline (cardFile2, line) && (line.length() > 0)){
+    while (getline(cardFile2, line) && (line.length() > 0)) {
+        istringstream iss(line);
+        iss >> suit >> rank;
+        bob.insert(Card(suit, rank));
+    }
+    cardFile2.close();
 
-  }
-  cardFile2.close();
-  
-  
-  return 0;
+    playGame(alice, bob);
+
+    return 0;
 }
